@@ -8,6 +8,9 @@ import {AuthConfig, NullValidationHandler, OAuthModule, OAuthService} from 'angu
 })
 export class AppComponent {
   title = 'keycloak-frontend';
+  username: string;
+  isLogged: boolean;
+  isRoot: boolean;
 
   constructor(private oauthService: OAuthService) {
     this.configure();
@@ -41,22 +44,31 @@ export class AppComponent {
     showDebugInformation: true,
   };
 
-  login(): void{
-    this.oauthService.initImplicitFlowInternal();
-
-  }
-
-  logut(): void{
-
-    this.oauthService.logOut();
-    // keycloak no soporta el revoke token ouath
-  }
 
   configure(): void{
     this.oauthService.configure(this.authConfig);
     this.oauthService.tokenValidationHandler = new NullValidationHandler();
     this.oauthService.setupAutomaticSilentRefresh();
-    this.oauthService.loadDiscoveryDocument().then(() => this.oauthService.tryLogin());
+    // on promise
+    // tslint:disable-next-line:max-line-length
+    this.oauthService.loadDiscoveryDocument().then(() => this.oauthService.tryLogin())
+      .then( () => {if (this.oauthService.getIdentityClaims()) {
+      this.isRoot = this.isAdmin();
+      this.isLogged = this.islog();
+    }
+      });
+  }
+
+  public islog(): boolean{
+    return (this.oauthService.hasValidIdToken() && this.oauthService.hasValidAccessToken());
+  }
+
+  public isAdmin(): boolean{
+    const t = this.oauthService.getAccessToken();
+    const payLoad = t.split('.')[1];
+    const decodeJson = atob(payLoad);
+    const decode = JSON.parse(decodeJson);
+    return decode.realm_acces.roles.indexOf('real-admin') !== -1 ;
   }
 
 
