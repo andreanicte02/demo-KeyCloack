@@ -11,18 +11,18 @@ export class MenuComponent implements OnInit {
   @Input() isLogged: boolean;
   @Input() isRoot: boolean;
 
-  constructor(private loginS: LoginService) { }
+  constructor(private loginService: LoginService) { }
 
   ngOnInit(): void {
   }
 
   public login(): void{
-    this.loginS.login();
+    this.loginService.login();
   }
 
 
   public logout(): void{
-    this.loginS.login();
+    this.loginService.logut();
   }
 
 }

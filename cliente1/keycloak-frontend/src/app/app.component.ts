@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import {AuthConfig, NullValidationHandler, OAuthModule, OAuthService} from 'angular-oauth2-oidc';
+import { LoginService } from './services/login.service';
 
 @Component({
   selector: 'app-root',
@@ -12,7 +13,7 @@ export class AppComponent {
   isLogged: boolean;
   isRoot: boolean;
 
-  constructor(private oauthService: OAuthService) {
+  constructor(private oauthService: OAuthService ,    private loginService: LoginService) {
     this.configure();
   }
 
@@ -53,23 +54,12 @@ export class AppComponent {
     // tslint:disable-next-line:max-line-length
     this.oauthService.loadDiscoveryDocument().then(() => this.oauthService.tryLogin())
       .then( () => {if (this.oauthService.getIdentityClaims()) {
-      this.isRoot = this.isAdmin();
-      this.isLogged = this.islog();
+      this.isRoot = this.loginService.getAdmin();
+      this.isLogged = this.loginService.getIsLogged();
     }
       });
   }
 
-  public islog(): boolean{
-    return (this.oauthService.hasValidIdToken() && this.oauthService.hasValidAccessToken());
-  }
-
-  public isAdmin(): boolean{
-    const t = this.oauthService.getAccessToken();
-    const payLoad = t.split('.')[1];
-    const decodeJson = atob(payLoad);
-    const decode = JSON.parse(decodeJson);
-    return decode.realm_acces.roles.indexOf('real-admin') !== -1 ;
-  }
 
 
 }
