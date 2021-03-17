@@ -10,12 +10,20 @@ import {RouterModule} from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import { MenuComponent } from './menu/menu.component';
 import { AppRoutingModule } from './app-routing.module';
+import { ListaComponent } from './foo/lista/lista.component';
+import { DetailComponent } from './foo/detail/detail.component';
+import { CreateComponent } from './foo/create/create.component';
+
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
-    MenuComponent
+    MenuComponent,
+    ListaComponent,
+    DetailComponent,
+    CreateComponent,
+
   ],
   imports: [
     BrowserModule,
