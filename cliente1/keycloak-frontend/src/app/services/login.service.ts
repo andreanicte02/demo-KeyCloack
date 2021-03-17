@@ -10,15 +10,6 @@ export class LoginService {
 
   }
 
-  public login(): void{
-    this.oauthService.initImplicitFlowInternal();
-  }
-
-  public logut(): void{
-
-    this.oauthService.logOut();
-    // keycloak no soporta el revoke token ouath
-  }
 
   public getIsLogged(): boolean{
     return (this.oauthService.hasValidIdToken() && this.oauthService.hasValidAccessToken());
@@ -29,9 +20,23 @@ export class LoginService {
     const payLoad = t.split('.')[1];
     const decodeJson = atob(payLoad);
     const decode = JSON.parse(decodeJson);
-    return decode.realm_acces.roles.indexOf('real-admin') !== -1 ;
+    return decode.realm_access.roles.indexOf('realm-admin') !== -1;
   }
 
+  public getUsername(): string {
+    return this.oauthService.getIdentityClaims()[`preferred_username`];
+  }
+
+
+  public login(): void{
+    this.oauthService.initImplicitFlowInternal();
+  }
+
+  public logut(): void{
+
+    this.oauthService.logOut();
+    // keycloak no soporta el revoke token oauth
+  }
 
 
 }

@@ -10,7 +10,7 @@ export class MenuComponent implements OnInit {
 
   @Input() isLogged: boolean;
   @Input() isRoot: boolean;
-
+  @Input() username: string;
   constructor(private loginService: LoginService) { }
 
   ngOnInit(): void {

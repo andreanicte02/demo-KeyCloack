@@ -56,10 +56,10 @@ export class AppComponent {
       .then( () => {if (this.oauthService.getIdentityClaims()) {
       this.isRoot = this.loginService.getAdmin();
       this.isLogged = this.loginService.getIsLogged();
+      this.username = this.loginService.getUsername();
     }
       });
   }
-
 
 
 }
